@@ -6,9 +6,7 @@ import torch
 from torch import nn
 import torch.optim as optim
 
-##############################
-# Gradient Clipping Utility  #
-##############################
+# Gradient Clipping Utility  
 
 class GradientClipping:
     def __init__(self, clip_value):
@@ -43,10 +41,8 @@ class GradientClipping:
         all_grads = self.total_grads + self.epoch_grads
         self.clip = np.mean(all_grads) if all_grads else self.clip
 
-######################################
-# Transformer Components and Layers  #
-######################################
 
+# Transformer Components and Layers 
 class FF(nn.Module):
     """Point-wise Feed-Forward Network used in transformer layers."""
     def __init__(self, input_size, hidden_size, dropout=0.1):
@@ -129,9 +125,7 @@ class Encoder(nn.Module):
             x = layer(x, mask)
         return x
 
-#################################
-# BSTransformer Model           #
-#################################
+# BSTransformer Model          
 
 class BSTransformer(nn.Module):
     """
@@ -257,9 +251,7 @@ class BSTransformer(nn.Module):
         targets = x[:, -1]
         return logits, targets
 
-#################################
-# Trainer and Data Preparation  #
-#################################
+# Trainer and Data Preparation 
 
 class Trainer:
     def __init__(self, model, config, device):
@@ -343,12 +335,11 @@ def batch_fn(user_sequences, context_features, batch_size, max_seq_len, shuffle=
             context_batches.append(torch.LongTensor(feat_batch))
         yield torch.LongTensor(seqs), context_batches
 
-##############################
-# Example Usage (Main Loop)  #
-##############################
+
+# main
 
 if __name__ == "__main__":
-    # Dummy configuration (adjust these numbers as needed)
+  
     config = {
         'item_embed': {
             'num_embeddings': 10000,  # total number of items in the catalog
@@ -380,8 +371,7 @@ if __name__ == "__main__":
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = BSTransformer(config)
     trainer = Trainer(model, config, device)
-    
-    # Generate dummy data (for demonstration purposes)
+
     num_samples = 1000
     user_sequences = []
     context_age = []
@@ -394,9 +384,7 @@ if __name__ == "__main__":
         context_age.append(random.randint(1, 99))
         context_gender.append(random.randint(0, 2))
     
-    # Create data loader (a generator of batches)
     batch_size = 32
     train_loader = list(batch_fn(user_sequences, [context_age, context_gender], batch_size, config['max_seq_len']))
     
-    # Train for one epoch
     trainer.train_epoch(train_loader)
