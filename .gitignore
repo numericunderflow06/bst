@@ -1,0 +1,5 @@
+*.csv
+*.json
+*.parquet
+.DS_Store
+*.pyc
